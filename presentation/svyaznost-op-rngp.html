@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Связанность общественных пространств — норматив для РНГП</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
+
+  :root {
+    --ink: #1a2421;
+    --muted: #5a6b64;
+    --paper: #f3efe6;
+    --leaf: #2f6b4f;
+    --leaf-deep: #1e4a36;
+    --sand: #d8cbb5;
+    --clay: #b85c38;
+    --line: #c9bfae;
+    --ok: #2f6b4f;
+    --warn: #b85c38;
+    --info: #3d5a80;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Manrope, sans-serif;
+    background:
+      radial-gradient(ellipse at 10% 0%, #e8efe8 0%, transparent 45%),
+      radial-gradient(ellipse at 90% 20%, #efe6d8 0%, transparent 40%),
+      var(--paper);
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  .deck { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+  .slide {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 40px 44px;
+    margin-bottom: 28px;
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .slide::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--leaf), #7aa889 50%, var(--sand));
+  }
+  .kicker {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--leaf);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 42px;
+    line-height: 1.12;
+    font-weight: 700;
+    max-width: 18ch;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 30px;
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  p, li { font-size: 15.5px; color: var(--ink); }
+  .lead { font-size: 18px; color: var(--muted); max-width: 52ch; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .box {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 16px 18px;
+    border-radius: 3px;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+  .tag-sp { background: #dceee3; color: var(--leaf-deep); }
+  .tag-prop { background: #f3e2d8; color: var(--clay); }
+  .tag-int { background: #dce4ef; color: var(--info); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 8px;
+  }
+  th, td {
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    padding: 9px 8px;
+    vertical-align: top;
+  }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .note {
+    margin-top: auto;
+    padding-top: 18px;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-top: 1px dashed var(--line);
+  }
+  .num {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 36px;
+    color: var(--leaf-deep);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .formula {
+    background: #1a2421;
+    color: #f3efe6;
+    padding: 18px 20px;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .formula strong { color: #b7d4c4; }
+  svg.plan { width: 100%; height: auto; display: block; background: #faf7f1; border: 1px solid var(--line); }
+  ul.check { list-style: none; }
+  ul.check li { padding: 6px 0 6px 22px; position: relative; }
+  ul.check li::before {
+    content: "";
+    width: 10px; height: 10px;
+    border: 2px solid var(--leaf);
+    position: absolute; left: 0; top: 10px;
+  }
+  .footer-nav {
+    position: sticky; bottom: 0;
+    display: flex; gap: 8px; justify-content: center;
+    padding: 12px; background: rgba(243,239,230,0.92);
+    border-top: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .footer-nav a {
+    color: var(--leaf-deep);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  @media (max-width: 800px) {
+    .slide { padding: 28px 20px; min-height: auto; }
+    h1 { font-size: 30px; }
+    h2 { font-size: 24px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: #fff; }
+    .footer-nav { display: none; }
+    .slide { box-shadow: none; break-after: page; min-height: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- 1 -->
+<section class="slide" id="s1">
+  <div class="kicker">Департамент архитектуры и градостроительства · проект нормы</div>
+  <h1>Связанность ОП: против бульвара «из ниоткуда в никуда»</h1>
+  <p class="lead">Норматив озеленения даёт площадь. Норматив связанности обязан заставить бульвар, сквер и парк работать на повседневные маршруты: дом → сад, магазин, остановка, площадь.</p>
+  <div class="grid-3" style="margin-top:12px">
+    <div class="box"><div class="num">01</div><h3 style="margin-top:8px">Проблема</h3><p>Бульвар ради м² озеленения без якорей</p></div>
+    <div class="box"><div class="num">02</div><h3 style="margin-top:8px">Правило</h3><p>Линейное ОП засчитывается только с якорями</p></div>
+    <div class="box"><div class="num">03</div><h3 style="margin-top:8px">РНГП</h3><p>Формулировки, которые нельзя обойти площадью</p></div>
+  </div>
+  <p class="note">База: СП 42.13330 п. 9.3 (непрерывная система) и п. 9.5 (бульвары по массовым потокам); РНГП операционализирует это расчётными показателями.</p>
+</section>
+
+<!-- 1b проблема -->
+<section class="slide" id="s1b">
+  <div class="kicker">Зачем норматив</div>
+  <h2>Типовой обход: бульвар ради озеленения</h2>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--clay)">Как делают сейчас</h3>
+      <svg class="plan" viewBox="0 0 480 300" role="img" aria-label="Бульвар из ниоткуда в никуда">
+        <rect width="480" height="300" fill="#faf7f1"/>
+        <rect x="20" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="130" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="260" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="370" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="20" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="130" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="260" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="370" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <!-- boulevard through middle, dead ends -->
+        <rect x="40" y="130" width="400" height="36" fill="#7aa889"/>
+        <text x="240" y="153" text-anchor="middle" fill="#1e4a36" font-size="13" font-family="Manrope" font-weight="700">бульвар · м² по нормативу ✓</text>
+        <text x="55" y="175" fill="#b85c38" font-size="11" font-family="Manrope">тупик</text>
+        <text x="400" y="175" fill="#b85c38" font-size="11" font-family="Manrope">тупик</text>
+        <!-- destinations off to the side, not connected -->
+        <rect x="30" y="40" width="50" height="28" fill="#b85c38"/>
+        <text x="55" y="58" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">ДОУ</text>
+        <rect x="390" y="210" width="50" height="28" fill="#b85c38"/>
+        <text x="415" y="228" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">магазин</text>
+        <rect x="280" y="40" width="50" height="28" fill="#3d5a80"/>
+        <text x="305" y="58" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">остановка</text>
+      </svg>
+      <p style="margin-top:8px;font-size:13.5px;color:var(--muted)">Озеленение закрыто. По бульвару нельзя отвести ребёнка в сад и сходить в магазин — он не ведёт к якорям.</p>
+    </div>
+    <div>
+      <h3 style="color:var(--leaf-deep)">Как должно быть по связанности</h3>
+      <svg class="plan" viewBox="0 0 480 300" role="img" aria-label="Бульвар с функциональными якорями">
+        <rect width="480" height="300" fill="#faf7f1"/>
+        <rect x="20" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="130" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="260" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="370" y="30" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="20" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="130" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="260" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="370" y="200" width="90" height="70" fill="#cfd8d3"/>
+        <rect x="40" y="130" width="400" height="36" fill="#2f6b4f"/>
+        <text x="240" y="153" text-anchor="middle" fill="#fff" font-size="13" font-family="Manrope" font-weight="700">бульвар = ребро сети</text>
+        <!-- anchors on boulevard -->
+        <rect x="50" y="110" width="54" height="26" fill="#1e4a36"/>
+        <text x="77" y="127" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">сквер</text>
+        <rect x="200" y="168" width="54" height="26" fill="#1e4a36"/>
+        <text x="227" y="185" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">ДОУ</text>
+        <rect x="320" y="110" width="70" height="26" fill="#1e4a36"/>
+        <text x="355" y="127" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">магазин</text>
+        <rect x="400" y="168" width="54" height="26" fill="#1e4a36"/>
+        <text x="427" y="185" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">площадь</text>
+        <circle cx="77" cy="148" r="5" fill="#b85c38"/>
+        <circle cx="227" cy="148" r="5" fill="#b85c38"/>
+        <circle cx="355" cy="148" r="5" fill="#b85c38"/>
+        <circle cx="427" cy="148" r="5" fill="#b85c38"/>
+      </svg>
+      <p style="margin-top:8px;font-size:13.5px;color:var(--muted)">Бульвар соединяет якоря повседневного спроса. Тогда он и даёт м², и работает как маршрут.</p>
+    </div>
+  </div>
+  <p class="note">Ключ нормы: <strong>площадь озеленения ≠ связанность</strong>. Бульвар без якорей может закрыть м², но не засчитывается в связанную систему ОП.</p>
+</section>
+
+<!-- 2 -->
+<section class="slide" id="s2">
+  <div class="kicker">Перепроверка достоверности</div>
+  <h2>Что подтверждено нормами, что — предложение</h2>
+  <table>
+    <thead>
+      <tr><th>Положение</th><th>Статус</th><th>Источник</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Непрерывная система озеленённых территорий О.П. и открытых пространств</td>
+        <td><span class="tag tag-sp">Из СП</span></td>
+        <td>СП 42.13330.2016 п. 9.3</td>
+      </tr>
+      <tr>
+        <td>Мин. площадь сквера 0,5 га (реконструкция — 0,1 га); сад жилого района — 3 га</td>
+        <td><span class="tag tag-sp">Из СП</span></td>
+        <td>СП 42.13330 п. 9.13</td>
+      </tr>
+      <tr>
+        <td>Доступность парка планировочного района ≤ 15 мин; городского ≤ 20 мин</td>
+        <td><span class="tag tag-sp">Из СП</span></td>
+        <td>СП 42.13330 п. 9.9; СП 475</td>
+      </tr>
+      <tr>
+        <td>Пешая доступность локального ОП ≈ 400 м (5 мин)</td>
+        <td><span class="tag tag-int">Междунар. / НГП</span></td>
+        <td>UN-Habitat SDG 11.7.1; часто в региональных НГП</td>
+      </tr>
+      <tr>
+        <td>Коэффициент прямизны маршрута (PRD) ≤ 1,5</td>
+        <td><span class="tag tag-int">Междунар.</span></td>
+        <td>Metro Portland, Estidama, INDEX; не в СП РФ</td>
+      </tr>
+      <tr>
+        <td>Бульвары и аллеи — в направлении массовых пешеходных потоков</td>
+        <td><span class="tag tag-sp">Из СП</span></td>
+        <td>СП 42.13330 п. 9.5 — РНГП делает это проверяемым</td>
+      </tr>
+      <tr>
+        <td>Линейное ОП засчитывается только при ≥2 функциональных якорях; иначе — не в связанность</td>
+        <td><span class="tag tag-prop">Предлагается</span></td>
+        <td>Против бульвара «из ниоткуда в никуда»</td>
+      </tr>
+      <tr>
+        <td>Шаг узлов ≤ 300 м; 100% в одной компоненте; ≥ 2 внешних выхода; PRD ≤ 1,5</td>
+        <td><span class="tag tag-prop">Предлагается</span></td>
+        <td>Проект показателей РНГП</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">Федеральный СП уже говорит «по потокам», но без метрик это не ловит формальный бульвар. РНГП добавляет якоря и запрет засчёта тупикового линейного ОП в связанность.</p>
+</section>
+
+<!-- 3 -->
+<section class="slide" id="s3">
+  <div class="kicker">Определение</div>
+  <h2>Связанность = сеть + повседневный смысл</h2>
+  <p class="lead" style="margin-bottom:16px">Мало соединить скверы между собой. Бульвар должен вести к <strong>функциональным якорям</strong>: ДОУ, магазину, остановке, площади — иначе он не связанность, а декоративное озеленение.</p>
+  <div class="grid-3">
+    <div class="box">
+      <span class="tag tag-sp">Уровень 1</span>
+      <h3>Физическая</h3>
+      <p>Непрерывный проход: тротуар, аллея, бульвар, переход.</p>
+    </div>
+    <div class="box">
+      <span class="tag tag-prop">Уровень 2</span>
+      <h3>Функциональная</h3>
+      <p>Путь к якорям повседневного спроса, доступность для МГН.</p>
+    </div>
+    <div class="box">
+      <span class="tag tag-prop">Уровень 3</span>
+      <h3>Сетевая</h3>
+      <p>ОП + якоря в одной компоненте пешеходного графа.</p>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:18px">
+    <div class="box">
+      <h3>Функциональные якоря</h3>
+      <ul class="check">
+        <li>ДОУ / школа, магазин повседневный, остановка</li>
+        <li>Поликлиника / ФАП, досуг местного значения</li>
+        <li>Сквер, сад, парк, площадь</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Не засчитывается в связанность</h3>
+      <ul class="check">
+        <li>Бульвар без якорей на концах / узлах</li>
+        <li>Путь через закрытый двор</li>
+        <li>«Зелень ради м²» вне массовых потоков</li>
+        <li>Переход магистрали вне обустроенного перехода</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" id="s4">
+  <div class="kicker">План · плохо / хорошо</div>
+  <h2>Два сценария планировки района</h2>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--clay)">Разрозненные ОП</h3>
+      <svg class="plan" viewBox="0 0 480 340" role="img" aria-label="План: разрозненные общественные пространства">
+        <rect width="480" height="340" fill="#faf7f1"/>
+        <!-- streets -->
+        <path d="M0 80 H480 M0 170 H480 M0 260 H480 M120 0 V340 M240 0 V340 M360 0 V340" stroke="#d9d0c2" stroke-width="18"/>
+        <path d="M0 80 H480 M0 170 H480 M0 260 H480 M120 0 V340 M240 0 V340 M360 0 V340" stroke="#ebe4d8" stroke-width="6"/>
+        <!-- blocks -->
+        <rect x="20" y="20" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="140" y="20" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="260" y="20" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="380" y="20" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="20" y="110" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="140" y="110" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="260" y="110" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="380" y="110" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="20" y="200" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="140" y="200" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="260" y="200" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="380" y="200" width="80" height="40" fill="#cfd8d3"/>
+        <rect x="20" y="290" width="80" height="30" fill="#cfd8d3"/>
+        <rect x="140" y="290" width="80" height="30" fill="#cfd8d3"/>
+        <rect x="260" y="290" width="80" height="30" fill="#cfd8d3"/>
+        <rect x="380" y="290" width="80" height="30" fill="#cfd8d3"/>
+        <!-- isolated parks -->
+        <rect x="145" y="25" width="70" height="30" rx="2" fill="#2f6b4f"/>
+        <rect x="385" y="205" width="70" height="30" rx="2" fill="#2f6b4f"/>
+        <rect x="25" y="295" width="70" height="20" rx="2" fill="#2f6b4f"/>
+        <!-- barrier highway -->
+        <rect x="0" y="155" width="480" height="30" fill="#b85c38" opacity="0.85"/>
+        <text x="240" y="175" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">магистраль без переходов</text>
+        <text x="180" y="48" fill="#fff" font-size="10" font-family="Manrope">сквер</text>
+        <text x="420" y="225" fill="#fff" font-size="10" font-family="Manrope">сквер</text>
+        <text x="60" y="310" fill="#fff" font-size="10" font-family="Manrope">сквер</text>
+      </svg>
+      <p style="margin-top:8px;font-size:13px;color:var(--muted)">Три узла, но разные компоненты связности. Обеспеченность «есть», связанности нет.</p>
+    </div>
+    <div>
+      <h3 style="color:var(--leaf-deep)">Связанная сеть ОП</h3>
+      <svg class="plan" viewBox="0 0 480 340" role="img" aria-label="План: связанная сеть общественных пространств">
+        <rect width="480" height="340" fill="#faf7f1"/>
+        <path d="M0 80 H480 M0 170 H480 M0 260 H480 M120 0 V340 M240 0 V340 M360 0 V340" stroke="#d9d0c2" stroke-width="18"/>
+        <path d="M0 80 H480 M0 170 H480 M0 260 H480 M120 0 V340 M240 0 V340 M360 0 V340" stroke="#ebe4d8" stroke-width="6"/>
+        <!-- green corridor / boulevard -->
+        <rect x="228" y="0" width="24" height="340" fill="#7aa889"/>
+        <rect x="0" y="158" width="480" height="24" fill="#7aa889"/>
+        <!-- nodes -->
+        <rect x="40" y="30" width="70" height="40" rx="2" fill="#2f6b4f"/>
+        <rect x="280" y="30" width="70" height="40" rx="2" fill="#2f6b4f"/>
+        <rect x="40" y="200" width="70" height="45" rx="2" fill="#2f6b4f"/>
+        <rect x="300" y="200" width="90" height="45" rx="2" fill="#2f6b4f"/>
+        <rect x="150" y="290" width="180" height="30" rx="2" fill="#1e4a36"/>
+        <!-- crossings -->
+        <rect x="232" y="150" width="16" height="40" fill="#f3efe6"/>
+        <rect x="220" y="164" width="40" height="12" fill="#f3efe6"/>
+        <circle cx="240" cy="40" r="5" fill="#b85c38"/>
+        <circle cx="75" cy="170" r="5" fill="#b85c38"/>
+        <circle cx="345" cy="170" r="5" fill="#b85c38"/>
+        <circle cx="240" cy="222" r="5" fill="#b85c38"/>
+        <circle cx="240" cy="305" r="5" fill="#b85c38"/>
+        <text x="75" y="55" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">сквер</text>
+        <text x="315" y="55" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">сквер</text>
+        <text x="75" y="225" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">сад</text>
+        <text x="345" y="225" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">площадь</text>
+        <text x="240" y="310" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">набережная</text>
+        <text x="250" y="20" fill="#1e4a36" font-size="10" font-family="Manrope">бульвар</text>
+      </svg>
+      <p style="margin-top:8px;font-size:13px;color:var(--muted)">Узлы + линейные связи (бульвар, променад) + переходы = одна компонента.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide" id="s5">
+  <div class="kicker">Методика проверки</div>
+  <h2>Как проверять связанность на ППТ</h2>
+  <div class="grid-2">
+    <div>
+      <svg class="plan" viewBox="0 0 480 300" role="img" aria-label="Схема пешеходного графа">
+        <rect width="480" height="300" fill="#faf7f1"/>
+        <!-- edges -->
+        <line x1="80" y1="70" x2="200" y2="90" stroke="#2f6b4f" stroke-width="4"/>
+        <line x1="200" y1="90" x2="340" y2="60" stroke="#2f6b4f" stroke-width="4"/>
+        <line x1="200" y1="90" x2="180" y2="190" stroke="#2f6b4f" stroke-width="4"/>
+        <line x1="180" y1="190" x2="320" y2="210" stroke="#2f6b4f" stroke-width="4"/>
+        <line x1="340" y1="60" x2="400" y2="160" stroke="#2f6b4f" stroke-width="4"/>
+        <line x1="320" y1="210" x2="400" y2="160" stroke="#2f6b4f" stroke-width="4"/>
+        <line x1="180" y1="190" x2="90" y2="250" stroke="#2f6b4f" stroke-width="4"/>
+        <!-- broken edge -->
+        <line x1="80" y1="70" x2="40" y2="180" stroke="#b85c38" stroke-width="3" stroke-dasharray="6 5"/>
+        <!-- nodes -->
+        <circle cx="80" cy="70" r="16" fill="#1e4a36"/>
+        <circle cx="200" cy="90" r="16" fill="#1e4a36"/>
+        <circle cx="340" cy="60" r="16" fill="#1e4a36"/>
+        <circle cx="180" cy="190" r="16" fill="#1e4a36"/>
+        <circle cx="320" cy="210" r="16" fill="#1e4a36"/>
+        <circle cx="400" cy="160" r="16" fill="#1e4a36"/>
+        <circle cx="90" cy="250" r="16" fill="#1e4a36"/>
+        <circle cx="40" cy="180" r="14" fill="#b85c38"/>
+        <text x="80" y="74" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">A</text>
+        <text x="200" y="94" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">B</text>
+        <text x="340" y="64" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">C</text>
+        <text x="180" y="194" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">D</text>
+        <text x="320" y="214" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">E</text>
+        <text x="400" y="164" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">F</text>
+        <text x="90" y="254" text-anchor="middle" fill="#fff" font-size="11" font-family="Manrope">G</text>
+        <text x="40" y="184" text-anchor="middle" fill="#fff" font-size="10" font-family="Manrope">X</text>
+        <text x="24" y="210" fill="#b85c38" font-size="11" font-family="Manrope">разрыв</text>
+        <text x="240" y="285" text-anchor="middle" fill="#5a6b64" font-size="12" font-family="Manrope">граф: вершины = ОП, рёбра = qualifying-пути</text>
+      </svg>
+    </div>
+    <div>
+      <ol style="padding-left:18px; display:flex; flex-direction:column; gap:10px;">
+        <li><strong>Инвентаризация узлов</strong> — ОП с площадью, входами, режимом доступа.</li>
+        <li><strong>Построение рёбер</strong> — только пути с тротуаром/аллеей и обустроенным пересечением УДС.</li>
+        <li><strong>Компонента связности</strong> — все нормируемые ОП в одной компоненте.</li>
+        <li><strong>Изохроны</strong> — доля жилья в 400 м <em>по сети</em> до связной сети ОП.</li>
+        <li><strong>PRD</strong> — путь по сети / по прямой ≤ 1,5.</li>
+      </ol>
+      <div class="box" style="margin-top:14px">
+        <h3>Состав материалов к согласованию</h3>
+        <p style="font-size:13.5px">Схема узлов · схема графа с длинами · таблица пар ОП · карта изохрон 5/10 мин · ведомость разрывов.</p>
+      </div>
+    </div>
+  </div>
+  <p class="note">Измерять по сети пешеходных путей, не по радиусу «по воздуху». Это согласуется с подходом UN-Habitat (service area along street network).</p>
+</section>
+
+<!-- 6 -->
+<section class="slide" id="s6">
+  <div class="kicker">Показатели</div>
+  <h2>Что обязательно проверить у застройщика</h2>
+  <table>
+    <thead>
+      <tr><th>Показатель</th><th>Значение</th><th>Зачем</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Якоря линейного ОП</td>
+        <td><strong>≥ 2</strong> функциональных якоря; якорь каждые ≤ 400 м</td>
+        <td>Режет бульвар «в никуда»</td>
+      </tr>
+      <tr>
+        <td>Доля «рабочей» длины бульваров</td>
+        <td><strong>≥ 70%</strong> на повседневных маршрутах</td>
+        <td>Дом→сад / магазин / остановка / ОП</td>
+      </tr>
+      <tr>
+        <td>Компонента связности ОП</td>
+        <td><strong>100%</strong> нормируемых ОП в одной компоненте</td>
+        <td>Не россыпь скверов</td>
+      </tr>
+      <tr>
+        <td>Изохрона от жилья до связанной сети</td>
+        <td><strong>≥ 90%</strong> жилья в ≤ 400 м по сети</td>
+        <td>Доступность, не площадь</td>
+      </tr>
+      <tr>
+        <td>PRD до ОП и якорей</td>
+        <td><strong>≤ 1,5</strong></td>
+        <td>Без вынужденных крюков</td>
+      </tr>
+      <tr>
+        <td>Бульвар без якорей</td>
+        <td><strong>не засчитывается</strong> в связанность</td>
+        <td>Можно учесть в м² озеленения отдельно, но норму связанности не закрывает</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="grid-2" style="margin-top:18px">
+    <div class="box">
+      <h3>Как мерить 400 м (правильно)</h3>
+      <svg class="plan" viewBox="0 0 420 220" style="border:none;background:#faf7f1" role="img" aria-label="Изохрона по сети против радиуса по прямой">
+        <!-- street grid -->
+        <path d="M40 40 H380 M40 100 H380 M40 160 H380 M100 20 V200 M180 20 V200 M260 20 V200 M340 20 V200" stroke="#e2d9cb" stroke-width="10"/>
+        <!-- euclidean circle = wrong method -->
+        <circle cx="180" cy="100" r="78" fill="none" stroke="#b85c38" stroke-width="2" stroke-dasharray="5 4" opacity="0.85"/>
+        <!-- network isochrone = irregular reachable area -->
+        <path d="M180 100 L140 100 L140 40 L100 40 L100 100 L40 100 L40 160 L100 160 L100 200 L180 200 L180 160 L260 160 L260 100 L220 100 Z"
+              fill="#dceee3" fill-opacity="0.75" stroke="#2f6b4f" stroke-width="2.5"/>
+        <!-- straight line (as crow flies) -->
+        <line x1="100" y1="160" x2="180" y2="100" stroke="#b85c38" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <!-- network path along streets -->
+        <path d="M100 160 H180 V100" fill="none" stroke="#1e4a36" stroke-width="3.5" stroke-linejoin="round"/>
+        <!-- points -->
+        <circle cx="100" cy="160" r="7" fill="#3d5a80"/>
+        <circle cx="180" cy="100" r="9" fill="#1e4a36"/>
+        <text x="78" y="182" fill="#3d5a80" font-size="11" font-family="Manrope" font-weight="700">жильё</text>
+        <text x="188" y="96" fill="#1e4a36" font-size="11" font-family="Manrope" font-weight="700">ОП</text>
+        <!-- labels -->
+        <text x="300" y="48" fill="#b85c38" font-size="11" font-family="Manrope">круг = по прямой</text>
+        <text x="300" y="64" fill="#b85c38" font-size="10" font-family="Manrope">(не использовать)</text>
+        <text x="300" y="130" fill="#1e4a36" font-size="11" font-family="Manrope" font-weight="700">зона = по сети</text>
+        <text x="300" y="146" fill="#1e4a36" font-size="10" font-family="Manrope">(изохрона нормы)</text>
+        <text x="118" y="128" fill="#b85c38" font-size="10" font-family="Manrope">прямая</text>
+        <text x="150" y="175" fill="#1e4a36" font-size="10" font-family="Manrope">путь по улицам</text>
+      </svg>
+      <p style="margin-top:8px;font-size:13px;color:var(--muted)">Норма считает <strong>путь по тротуарам</strong>, не радиус «по воздуху». Изохрона — неровная зона вдоль сети.</p>
+    </div>
+    <div class="box">
+      <h3>Формула отсечения</h3>
+      <p style="margin-top:8px"><strong>м² озеленения</strong> — сколько зелени.<br><strong>Связанность</strong> — куда по ней пройти.</p>
+      <p style="margin-top:10px;font-size:13px;color:var(--muted)">Закрыл только м² бульваром без ДОУ/магазина/остановки/сквера на концах → связанность <em>не выполнена</em>.</p>
+      <p style="margin-top:14px;font-size:13.5px"><strong>PRD</strong> = длина по сети ÷ длина по прямой ≤ <strong>1,5</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide" id="s7">
+  <div class="kicker">Критерии ребра сети</div>
+  <h2>Когда путь засчитывается как связь</h2>
+  <div class="grid-2">
+    <div class="box">
+      <span class="tag tag-prop">Засчитывается</span>
+      <ul class="check">
+        <li>Непрерывный тротуар / аллея / бульвар</li>
+        <li>Пересечение УДС через переход (в т.ч. регулируемый) или shared space</li>
+        <li>Параметры доступности по СП 59.13330</li>
+        <li>Общедоступность: круглосуточно или по утверждённому регламенту</li>
+        <li>Пешеходная галерея / эспланада общего пользования</li>
+      </ul>
+    </div>
+    <div class="box">
+      <span class="tag tag-sp">Не засчитывается</span>
+      <ul class="check">
+        <li>Проезд без тротуара</li>
+        <li>Путь через закрытый двор / частный участок</li>
+        <li>Фактический переход вне зебры через магистраль</li>
+        <li>Лестница без альтернативы для МГН (если сеть нормируемая как доступная)</li>
+        <li>Временный / неоформленный проход</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box" style="margin-top:18px">
+    <h3>Связь с уже действующим СП</h3>
+    <p>Пункт 9.3 СП 42.13330 уже требует <em>«непрерывную систему озеленённых территорий общего пользования и других открытых пространств»</em>. РНГП не создаёт новое понятие с нуля, а <strong>операционализирует</strong> его расчётными показателями обеспеченности и доступности (формат приказа № 71).</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide" id="s8">
+  <div class="kicker">Формулировки для РНГП · часть 1</div>
+  <h2>Термины и область применения</h2>
+  <div class="formula"><strong>Статья / раздел.</strong> Связанность общественных пространств жилых районов
+
+<strong>1. Область применения.</strong> Показатели связанности применяются дополнительно к нормативам площади озеленения и не подменяются ими: выполнение только норматива площади без связанности не допускается.
+
+<strong>2. Термины.</strong>
+ОП — общедоступная территория для пребывания и передвижения (площадь, сквер, сад, парк, бульвар, набережная, пешеходная улица…).
+
+Линейное ОП — бульвар, аллея, набережная, променад (связующая функция).
+
+Функциональный якорь — объект повседневного тяготения: ДОУ/школа, торговля повседневная, остановка ОТ, первичное здравоохранение, досуг местного значения, иное ОП, вход в общественно-деловую зону.
+
+Связанность — нормируемые ОП в одной компоненте пешеходного графа, а линейные ОП обеспечивают связи между функциональными якорями повседневных маршрутов.</div>
+</section>
+
+<!-- 9 -->
+<section class="slide" id="s9">
+  <div class="kicker">Формулировки для РНГП · часть 2</div>
+  <h2>Расчётные показатели</h2>
+  <div class="formula"><strong>3. Минимально допустимый уровень обеспеченности (связанность).</strong>
+3.1. 100% нормируемых ОП района — в одной пешеходной компоненте связности.
+3.2. Не менее 2 пешеходных подключений системы ОП к смежным планировочным элементам.
+3.3. Расстояние по сети между соседними нормируемыми ОП — не более 300 м.
+
+<strong>3.4–3.5. Линейные ОП (бульвары).</strong>
+Линейное ОП засчитывается в связанную систему только если:
+1) соединяет ≥ 2 функциональных якоря;
+2) хотя бы один якорь — объект обслуживания (ДОУ/школа, торговля повседневная, остановка, первичное здравоохранение) либо иное нормируемое ОП;
+3) на каждые 400 м длины — вход к якорю или связь к нему;
+4) размещено по направлению массовых пешеходных потоков (СП 42 п. 9.5).
+
+Бульвар без якорей («из ниоткуда в никуда») <strong>не засчитывается в связанность</strong> (в м² озеленения — только с отдельной пометкой о невыполнении связанности).
+
+<strong>3.6.</strong> ≥ 70% длины линейных ОП района — на повседневных маршрутах (дом—сад/школа; дом—магазин; дом—остановка; дом—сквер/площадь).</div>
+</section>
+
+<!-- 10 -->
+<section class="slide" id="s10">
+  <div class="kicker">Формулировки для РНГП · часть 3</div>
+  <h2>Доступность, учёт связей, документы</h2>
+  <div class="formula"><strong>4. Территориальная доступность.</strong>
+4.1. ≥ 90% жилой застройки — в ≤ 400 м по сети до ОП связанной системы.
+4.2. PRD до ближайшего ОП связанной системы ≤ 1,5.
+4.3. Парк планировочного района — ≤ 15 мин (СП 42).
+4.4. PRD по повседневным маршрутам дом—ДОУ / магазин / остановка ≤ 1,5 (если объект в районе).
+
+<strong>5. Учёт связи.</strong> Непрерывность пути; обустроенные пересечения УДС; доступность МГН; без частных дворов; для бульвара — якоря по п. 3.4–3.5.
+
+<strong>6. Состав материалов ППТ.</strong> Схема ОП (узловые / линейные) · схема якорей и повседневных маршрутов · граф с длинами · расчёт компоненты · ведомость бульваров с якорями и долей «рабочей» длины · изохроны · PRD · ведомость разрывов · экспликация объектов, учтённых в м² озеленения, но не в связанности.
+
+<strong>7.</strong> Норма развивает СП 42 п. 9.3 и 9.5 и не подменяет норматив площади озеленения.</div>
+  <p class="note">Полный текст статей — в presentation/rngp-formulirovki.md. Числа 70%, 300 м, 90% — проектные; калибровать на пилотных ППТ.</p>
+</section>
+
+<!-- 11 -->
+<section class="slide" id="s11">
+  <div class="kicker">Итог</div>
+  <h2>Что говорим застройщику</h2>
+  <div class="grid-3">
+    <div class="box">
+      <div class="num">1</div>
+      <h3 style="margin-top:8px">м² ≠ связанность</h3>
+      <p>Бульвар может закрыть озеленение и при этом провалить связанность.</p>
+    </div>
+    <div class="box">
+      <div class="num">2</div>
+      <h3 style="margin-top:8px">Нужны якоря</h3>
+      <p>≥2 якоря на линейном ОП: сад/школа, магазин, остановка, сквер, площадь.</p>
+    </div>
+    <div class="box">
+      <div class="num">3</div>
+      <h3 style="margin-top:8px">Проверка в ППТ</h3>
+      <p>Схема повседневных маршрутов + ведомость бульваров с якорями — обязательно.</p>
+    </div>
+  </div>
+  <div class="box" style="margin-top:20px">
+    <h3>Рабочая формула нормы</h3>
+    <p>«Линейное ОП засчитывается в связанную систему только если соединяет функциональные якоря повседневного спроса. Иначе — не связанность, даже при выполнении норматива площади озеленения.»</p>
+  </div>
+  <p class="note">Презентация: presentation/svyaznost-op-rngp.html · формулировки: presentation/rngp-formulirovki.md · просмотр: htmlpreview.github.io по ветке PR</p>
+</section>
+
+</div>
+
+<nav class="footer-nav">
+  <a href="#s1">Титул</a>
+  <a href="#s1b">Проблема</a>
+  <a href="#s2">Достоверность</a>
+  <a href="#s3">Определение</a>
+  <a href="#s4">Планы</a>
+  <a href="#s6">Показатели</a>
+  <a href="#s8">РНГП</a>
+  <a href="#s11">Итог</a>
+</nav>
+</body>
+</html>
