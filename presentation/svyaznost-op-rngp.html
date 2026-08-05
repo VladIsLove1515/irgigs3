@@ -530,20 +530,39 @@
   </table>
   <div class="grid-2" style="margin-top:18px">
     <div class="box">
-      <h3>Изохрона 400 м</h3>
-      <svg class="plan" viewBox="0 0 420 160" style="border:none;background:transparent">
-        <circle cx="210" cy="80" r="70" fill="#dceee3" stroke="#2f6b4f" stroke-width="2" stroke-dasharray="4 3"/>
-        <circle cx="210" cy="80" r="8" fill="#1e4a36"/>
-        <path d="M210 80 L250 50 L290 70 L320 40" fill="none" stroke="#b85c38" stroke-width="3"/>
-        <path d="M210 80 L240 100 L270 95 L300 120" fill="none" stroke="#2f6b4f" stroke-width="3"/>
-        <text x="330" y="38" fill="#b85c38" font-size="11" font-family="Manrope">по воздуху</text>
-        <text x="310" y="138" fill="#2f6b4f" font-size="11" font-family="Manrope">по сети</text>
+      <h3>Как мерить 400 м (правильно)</h3>
+      <svg class="plan" viewBox="0 0 420 220" style="border:none;background:#faf7f1" role="img" aria-label="Изохрона по сети против радиуса по прямой">
+        <!-- street grid -->
+        <path d="M40 40 H380 M40 100 H380 M40 160 H380 M100 20 V200 M180 20 V200 M260 20 V200 M340 20 V200" stroke="#e2d9cb" stroke-width="10"/>
+        <!-- euclidean circle = wrong method -->
+        <circle cx="180" cy="100" r="78" fill="none" stroke="#b85c38" stroke-width="2" stroke-dasharray="5 4" opacity="0.85"/>
+        <!-- network isochrone = irregular reachable area -->
+        <path d="M180 100 L140 100 L140 40 L100 40 L100 100 L40 100 L40 160 L100 160 L100 200 L180 200 L180 160 L260 160 L260 100 L220 100 Z"
+              fill="#dceee3" fill-opacity="0.75" stroke="#2f6b4f" stroke-width="2.5"/>
+        <!-- straight line (as crow flies) -->
+        <line x1="100" y1="160" x2="180" y2="100" stroke="#b85c38" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <!-- network path along streets -->
+        <path d="M100 160 H180 V100" fill="none" stroke="#1e4a36" stroke-width="3.5" stroke-linejoin="round"/>
+        <!-- points -->
+        <circle cx="100" cy="160" r="7" fill="#3d5a80"/>
+        <circle cx="180" cy="100" r="9" fill="#1e4a36"/>
+        <text x="78" y="182" fill="#3d5a80" font-size="11" font-family="Manrope" font-weight="700">жильё</text>
+        <text x="188" y="96" fill="#1e4a36" font-size="11" font-family="Manrope" font-weight="700">ОП</text>
+        <!-- labels -->
+        <text x="300" y="48" fill="#b85c38" font-size="11" font-family="Manrope">круг = по прямой</text>
+        <text x="300" y="64" fill="#b85c38" font-size="10" font-family="Manrope">(не использовать)</text>
+        <text x="300" y="130" fill="#1e4a36" font-size="11" font-family="Manrope" font-weight="700">зона = по сети</text>
+        <text x="300" y="146" fill="#1e4a36" font-size="10" font-family="Manrope">(изохрона нормы)</text>
+        <text x="118" y="128" fill="#b85c38" font-size="10" font-family="Manrope">прямая</text>
+        <text x="150" y="175" fill="#1e4a36" font-size="10" font-family="Manrope">путь по улицам</text>
       </svg>
+      <p style="margin-top:8px;font-size:13px;color:var(--muted)">Норма считает <strong>путь по тротуарам</strong>, не радиус «по воздуху». Изохрона — неровная зона вдоль сети.</p>
     </div>
     <div class="box">
       <h3>Формула отсечения</h3>
       <p style="margin-top:8px"><strong>м² озеленения</strong> — сколько зелени.<br><strong>Связанность</strong> — куда по ней пройти.</p>
       <p style="margin-top:10px;font-size:13px;color:var(--muted)">Закрыл только м² бульваром без ДОУ/магазина/остановки/сквера на концах → связанность <em>не выполнена</em>.</p>
+      <p style="margin-top:14px;font-size:13.5px"><strong>PRD</strong> = длина по сети ÷ длина по прямой ≤ <strong>1,5</strong></p>
     </div>
   </div>
 </section>
