@@ -46,12 +46,21 @@ def main(argv: list[str] | None = None) -> None:
         action="store_true",
         help="Run dry-run poll until idle, print deals, exit",
     )
+    parser.add_argument(
+        "--playerok-whoami",
+        action="store_true",
+        help="Call live Playerok GraphQL (viewer + products + paid sales) and exit",
+    )
     parser.add_argument("--host", default=None)
     parser.add_argument("--port", type=int, default=None)
     args = parser.parse_args(argv)
 
     settings = get_settings()
     setup_logging(settings)
+
+    if args.playerok_whoami:
+        asyncio.run(_playerok_whoami(settings))
+        return
 
     if args.once:
         asyncio.run(_run_once(settings))
@@ -62,6 +71,27 @@ def main(argv: list[str] | None = None) -> None:
     port = args.port or settings.port
     print(f"Panel: http://{host}:{port}  dry_run={settings.dry_run}")
     uvicorn.run(app, host=host, port=port, log_level="info")
+
+
+async def _playerok_whoami(settings: Settings) -> None:
+    client = PlayerokClient(settings)
+    try:
+        snap = await client.snapshot()
+        print(f"playerok user @{snap['username']} id={snap['id']}")
+        print(f"  balance={snap['balance']} blocked={snap['blocked']} publish={snap['can_publish']}")
+        print(f"  products={len(snap['items'])} paid_sales={len(snap['paid_sales'])}")
+        for item in snap["items"][:20]:
+            print(
+                f"    item {item['id']}  {item['status']:16}  "
+                f"{item['price']:>8}  {item['title']}"
+            )
+        for sale in snap["paid_sales"][:20]:
+            print(
+                f"    sale {sale['id']}  {sale['status']:12}  "
+                f"{sale['price']:>8}  {sale['title']}"
+            )
+    finally:
+        await client.aclose()
 
 
 async def _run_once(settings) -> None:

@@ -39,7 +39,16 @@ python -m src
 4. Покупает лот, пишет продавцу ник, сообщает покупателю на Playerok.
 5. Застрявшие стадии (кроме ожидания ника) уходят в `needs_review`.
 
-Live-режим не включится, пока `DRY_RUN=true`. Для live ещё нужен `LIVE_CONFIRM_TOKEN=I_ACCEPT_LIVE_RISK`. Сами live-клиенты Playerok/FunPay пока намеренно закрыты заглушками: без проверенного парсера бот не будет тратить деньги.
+Live-режим не включится, пока `DRY_RUN=true`. Для live ещё нужен `LIVE_CONFIRM_TOKEN=I_ACCEPT_LIVE_RISK`. FunPay-покупки по-прежнему заглушка. Playerok читает GraphQL сессии (`PLAYEROK_TOKEN` = cookie `token`).
+
+Проверка аккаунта **с домашнего интернета** (с той же сети, где ты логинился в браузере):
+
+```bash
+# в .env: PLAYEROK_TOKEN=<cookie token с playerok.com>
+python -m src --playerok-whoami
+```
+
+Облачные/VPS IP Playerok часто режет DDoS-Guard. Если whoami пишет про blocked IP — добавь в `.env` cookie `__ddg5_` как `PLAYEROK_DDG5` и запускай дома, не с сервера.
 
 ## Тесты
 

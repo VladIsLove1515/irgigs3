@@ -45,6 +45,7 @@ class Settings(BaseSettings):
         "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
     )
     playerok_token: str = ""
+    playerok_ddg5: str = ""
     playerok_user_agent: str = (
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
