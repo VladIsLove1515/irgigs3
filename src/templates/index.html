@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Playerok → FunPay</title>
+  <style>
+    :root {
+      --bg: #10151c;
+      --panel: #171e27;
+      --line: #2b3542;
+      --text: #e8eef6;
+      --muted: #8b9aab;
+      --accent: #4aa3ff;
+      --ok: #3ecf8e;
+      --warn: #e6b84d;
+      --bad: #f07178;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --sans: "IBM Plex Sans", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(1000px 500px at 0% -20%, #1a2c40 0%, transparent 55%),
+        radial-gradient(800px 400px at 100% 0%, #1c2430 0%, transparent 45%),
+        var(--bg);
+    }
+    header {
+      display: flex; justify-content: space-between; gap: 1rem; align-items: flex-end;
+      padding: 1.4rem 1.6rem 1rem; border-bottom: 1px solid var(--line);
+    }
+    header h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+    header p { margin: 0.3rem 0 0; color: var(--muted); font-size: 0.9rem; }
+    .badge {
+      font-family: var(--mono); font-size: 0.72rem;
+      padding: 0.25rem 0.5rem; border: 1px solid var(--line); background: var(--panel);
+    }
+    .badge.ok { color: var(--ok); border-color: #2f6b4f; }
+    .badge.bad { color: var(--bad); border-color: #7a3a40; }
+    main {
+      display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 1rem;
+      padding: 1rem 1.6rem 2rem;
+    }
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: flex-start; }
+    }
+    section {
+      background: color-mix(in srgb, var(--panel) 94%, transparent);
+      border: 1px solid var(--line); padding: 1rem;
+    }
+    section h2 {
+      margin: 0 0 0.7rem; font-size: 0.78rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.5rem 0.35rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-size: 0.75rem; font-weight: 500; }
+    a { color: var(--accent); text-decoration: none; }
+    .stage { font-family: var(--mono); font-size: 0.75rem; }
+    .stage.completed { color: var(--ok); }
+    .stage.failed, .stage.needs_review { color: var(--bad); }
+    .stage.awaiting_username, .stage.sourcing, .stage.buying { color: var(--warn); }
+    .meta { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.8rem; }
+    button, .btn, input[type=text] {
+      appearance: none; border: 1px solid var(--line); background: #202833;
+      color: var(--text); padding: 0.4rem 0.7rem; font: inherit;
+    }
+    input[type=text] { min-width: 10rem; }
+    button:hover, .btn:hover { border-color: var(--accent); cursor: pointer; }
+    .log {
+      max-height: 380px; overflow: auto; font-family: var(--mono);
+      font-size: 0.72rem; line-height: 1.45; color: var(--muted);
+    }
+    .log .error { color: var(--bad); }
+    .log .warn { color: var(--warn); }
+    .detail dl {
+      display: grid; grid-template-columns: 8.5rem 1fr; gap: 0.3rem 0.7rem;
+      margin: 0; font-size: 0.88rem;
+    }
+    .detail dt { color: var(--muted); }
+    .detail dd { margin: 0; font-family: var(--mono); word-break: break-all; }
+    .empty { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Playerok → FunPay</h1>
+      <p>
+        sale ingest → @username → FunPay buy → message seller
+        · margin ≥ {{ settings.min_margin_pct }}%
+        · max buy {{ settings.max_funpay_price }}
+      </p>
+    </div>
+    <div>
+      {% if settings.dry_run %}<span class="badge ok">DRY_RUN</span>
+      {% else %}<span class="badge bad">LIVE</span>{% endif %}
+      {% if last_tick %}<span class="badge">tick +{{ last_tick.ingested }} adv {{ last_tick.advanced }} stuck {{ last_tick.stuck }}</span>{% endif %}
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>Сделки</h2>
+      {% if deals %}
+      <table>
+        <thead>
+          <tr>
+            <th>id</th><th>stage</th><th>лот</th><th>user</th><th>sale→buy</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for d in deals %}
+          <tr>
+            <td><a href="/?deal={{ d.id }}">{{ d.id[:8] }}</a></td>
+            <td><span class="stage {{ d.stage.value }}">{{ d.stage.value }}</span></td>
+            <td>{{ d.title }}<div class="meta">{{ d.playerok_sale_id }}</div></td>
+            <td class="meta">{{ d.username or '—' }}</td>
+            <td class="meta">{{ '%.0f'|format(d.sale_price) }}→{{ '%.0f'|format(d.funpay_price or 0) }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="empty">Сделок пока нет — polling подхватит оплаты Playerok.</p>
+      {% endif %}
+      <div class="actions">
+        <form method="post" action="/api/tick"><button type="submit">Tick сейчас</button></form>
+        <a class="btn" href="/">Обновить</a>
+      </div>
+    </section>
+
+    <div style="display:grid; gap:1rem;">
+      <section class="detail">
+        <h2>Детали {% if selected %}?deal={{ selected.id[:8] }}…{% endif %}</h2>
+        {% if selected %}
+          <dl>
+            <dt>id</dt><dd>{{ selected.id }}</dd>
+            <dt>stage</dt><dd>{{ selected.stage.value }}</dd>
+            <dt>sale</dt><dd>{{ selected.playerok_sale_id }} / {{ selected.playerok_lot_id }}</dd>
+            <dt>title</dt><dd>{{ selected.title }}</dd>
+            <dt>username</dt><dd>{{ selected.username or '—' }}</dd>
+            <dt>funpay</dt><dd>{{ selected.funpay_lot_id or '—' }} / {{ selected.funpay_order_id or '—' }}</dd>
+            <dt>prices</dt><dd>{{ selected.sale_price }} → {{ selected.funpay_price or '—' }} (margin {{ selected.expected_margin_pct or '—' }})</dd>
+            <dt>error</dt><dd>{{ selected.last_error or '—' }}</dd>
+          </dl>
+          <form class="actions" method="post" action="/api/deals/{{ selected.id }}/username">
+            <input type="text" name="username" placeholder="@username" />
+            <button type="submit">Задать username</button>
+          </form>
+          {% if selected.stage.value not in ['completed','failed'] %}
+          <form class="actions" method="post" action="/api/deals/{{ selected.id }}/fail"
+                onsubmit="return confirm('failed?')">
+            <button type="submit">Пометить failed</button>
+          </form>
+          {% endif %}
+        {% else %}
+          <p class="empty">Выбери сделку — откроется <span class="meta">/?deal=…</span> (id в data/deals.db).</p>
+        {% endif %}
+      </section>
+
+      <section>
+        <h2>События</h2>
+        <div class="log">
+          {% for e in events %}
+            <div class="{{ e.level }}">
+              {{ e.created_at[11:19] if e.created_at else '' }}
+              [{% if e.deal_id %}{{ e.deal_id[:8] }}{% else %}----{% endif %}]
+              {{ e.message }}
+            </div>
+          {% else %}
+            <div>лог пуст</div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section>
+        <h2>Health</h2>
+        <div class="meta">
+          playerok: dry={{ health.playerok.dry_run }} token={{ health.playerok.has_token }}<br />
+          funpay: dry={{ health.funpay.dry_run }} token={{ health.funpay.has_token }}<br />
+          telegram: {{ 'on' if health.telegram else 'off' }}
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    setTimeout(() => {
+      const q = new URLSearchParams(location.search).get('deal');
+      location.href = q ? `/?deal=${q}` : '/';
+    }, 8000);
+  </script>
+</body>
+</html>
